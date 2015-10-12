@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.Button CheckBtn;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MForm));
             this.ResultBox = new System.Windows.Forms.ListView();
             this.Ip_address = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -51,26 +50,12 @@
             this.AddressEdit = new System.Windows.Forms.ComboBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            CheckBtn = new System.Windows.Forms.Button();
+            this.ScanBtn = new System.Windows.Forms.Button();
             this.ResBoxContextMenuStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // CheckBtn
-            // 
-            CheckBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            CheckBtn.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            CheckBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            CheckBtn.ForeColor = System.Drawing.SystemColors.ControlText;
-            CheckBtn.Location = new System.Drawing.Point(6, 5);
-            CheckBtn.Name = "CheckBtn";
-            CheckBtn.Size = new System.Drawing.Size(102, 38);
-            CheckBtn.TabIndex = 0;
-            CheckBtn.Text = "&Сканировать";
-            CheckBtn.UseVisualStyleBackColor = true;
-            CheckBtn.Click += new System.EventHandler(this.CheckBtn_Click);
             // 
             // ResultBox
             // 
@@ -147,13 +132,13 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.ScanBtn);
             this.panel1.Controls.Add(this.UpdateLink);
             this.panel1.Controls.Add(this.StopBtn);
             this.panel1.Controls.Add(this.labelAllCount);
             this.panel1.Controls.Add(this.labelBackCount);
             this.panel1.Controls.Add(this.labelWhiteCount);
             this.panel1.Controls.Add(this.CancelBtn);
-            this.panel1.Controls.Add(CheckBtn);
             this.panel1.Location = new System.Drawing.Point(594, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(120, 421);
@@ -177,7 +162,7 @@
             this.StopBtn.Name = "StopBtn";
             this.StopBtn.Size = new System.Drawing.Size(102, 25);
             this.StopBtn.TabIndex = 7;
-            this.StopBtn.Text = "Стоп";
+            this.StopBtn.Text = "С&топ";
             this.StopBtn.UseVisualStyleBackColor = true;
             this.StopBtn.Click += new System.EventHandler(this.StopBtn_Click);
             // 
@@ -218,7 +203,7 @@
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(102, 25);
             this.CancelBtn.TabIndex = 2;
-            this.CancelBtn.Text = "Выход";
+            this.CancelBtn.Text = "&Выход";
             this.CancelBtn.UseVisualStyleBackColor = true;
             this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 
@@ -244,7 +229,7 @@
             this.AddressEdit.Size = new System.Drawing.Size(584, 21);
             this.AddressEdit.TabIndex = 0;
             this.AddressEdit.Tag = "";
-            this.AddressEdit.Text = "127.0.0.1";
+            this.AddressEdit.Text = "google.com";
             this.AddressEdit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AddressEdit_KeyDown);
             // 
             // statusStrip
@@ -261,6 +246,16 @@
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(160, 16);
             this.toolStripProgressBar.Visible = false;
+            // 
+            // ScanBtn
+            // 
+            this.ScanBtn.Location = new System.Drawing.Point(6, 4);
+            this.ScanBtn.Name = "ScanBtn";
+            this.ScanBtn.Size = new System.Drawing.Size(102, 39);
+            this.ScanBtn.TabIndex = 9;
+            this.ScanBtn.Text = "&Сканировать";
+            this.ScanBtn.UseVisualStyleBackColor = true;
+            this.ScanBtn.Click += new System.EventHandler(this.ScanBtn_Click);
             // 
             // MForm
             // 
@@ -309,6 +304,7 @@
         private System.Windows.Forms.ToolStripMenuItem SaveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem ExitToolStripMenuItem;
+        private System.Windows.Forms.Button ScanBtn;
     }
 }
 

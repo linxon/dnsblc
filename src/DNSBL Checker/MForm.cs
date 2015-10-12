@@ -111,17 +111,20 @@ namespace DNSBL_Checker
                     }, RFileFolder, true);
 
                     // Отправляем делегату информацию о результатов сканирования
-                    Invoke(
-                        InfoUpdater, 
+                    if(InvokeRequired)
+                    {
+                        Invoke(
+                            InfoUpdater,
 
-                        NewIp,
-                        c * 100,
-                        i * 100,
+                            NewIp,
+                            c * 100,
+                            i * 100,
 
-                        "Всего: " + Convert.ToString(this.bads + this.goods),
-                        "В черном списке: " + Convert.ToString(this.bads),
-                        "Нейтральные: " + Convert.ToString(this.goods)
-                    );
+                            "Всего: " + Convert.ToString(this.bads + this.goods),
+                            "В черном списке: " + Convert.ToString(this.bads),
+                            "Нейтральные: " + Convert.ToString(this.goods)
+                        );
+                    }
 
                     Application.DoEvents();
                 } else
@@ -165,7 +168,9 @@ namespace DNSBL_Checker
             this.AddressEdit.Enabled = true;
             this.ScanBtnStat = false;
             UpdateLink.Enabled = true;
+            this.ScanBtn.Enabled = true;
             UpdateLinkStat = false;
+            UpdateLink.Enabled = true;
             this.toolStripProgressBar.Visible = false;
 
             // Обнуляем счетчики
@@ -235,6 +240,7 @@ namespace DNSBL_Checker
                 this.AddressEdit.Enabled = false;
                 UpdateLink.Enabled = false;
                 this.StopBtn.Enabled = true;
+                this.ScanBtn.Enabled = false;
                 this.toolStripProgressBar.Visible = true;
 
                 if (this.AddressEdit.Text.Length > 2)
@@ -259,7 +265,7 @@ namespace DNSBL_Checker
 
         /* Обработка событий
         --------------------------------*/
-        private void CheckBtn_Click(object sender, EventArgs e)
+        private void ScanBtn_Click(object sender, EventArgs e)
         {
             this.run();
         }
@@ -291,7 +297,6 @@ namespace DNSBL_Checker
         {
             this.StopBtnStat = true;
             this.ScanBtnStat = false;
-            UpdateLink.Enabled = true;
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -301,6 +306,7 @@ namespace DNSBL_Checker
             this.AddressEdit.Enabled = false;
             UpdateLink.Enabled = false;
             UpdateLinkStat = true;
+            this.ScanBtn.Enabled = false;
 
             this.UList = new Thread(UpdateServerList);
             UList.Start();
