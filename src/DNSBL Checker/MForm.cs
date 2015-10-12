@@ -13,12 +13,13 @@ namespace DNSBL_Checker
 {
     public partial class MForm : Form
     {
-        // Файлы для чтения и построения списков
+        // Имя файлов, для чтения и построения списков
         const string BLFilename = "servers.dat";
         const string CFilename = "scan-history.cache";
         const string RFilename = "result.log";
 
-        const string RFileFolder = "logs/";
+        // Путь к лог-результатам
+        string RFileFolder = "logs/";
 
         // Необходимые поля
         string MFormTitle = "DNSBL Checker: (by Linxon http://www.linxon.ru)";
@@ -58,9 +59,14 @@ namespace DNSBL_Checker
             ARGSParserClass AParser = new ARGSParserClass();
             ARGS = AParser.GetArgs();  // Получаем список аргументов
 
-            // Проверяем на доступность 1-го агумента с максимальным числом символов 2
+            // Проверяем на доступность 1-го агумента с минимальным числом символов 2 (учитывается домен с 3-х значными символами)
             if (AParser.CheckArg(ARGS, 1, 2))
             {
+                if(AParser.CheckArg(ARGS, 2, 3))
+                {
+                    this.RFileFolder = ARGS[2];
+                }
+
                 this.WindowState = FormWindowState.Minimized;
                 this.ShowInTaskbar = false;
 
@@ -68,9 +74,9 @@ namespace DNSBL_Checker
                 this.BootThread = new Thread(() => RunScan(ARGS[1]));
                 BootThread.IsBackground = true;
                 BootThread.Start();
-            }
 
-            this.ResetForm();
+            } else
+                this.ResetForm();   // Устанавливаем умолчания
         }
 
         /* Необходимые методы
@@ -106,9 +112,9 @@ namespace DNSBL_Checker
                     }
 
                     FileRenderClass SFileRender = new FileRenderClass(Address + "_" + RFilename);
-                    SFileRender.SaveResult(Address + "_" + RFilename, new string[] {
+                    SFileRender.SaveResult(RFileFolder, new string[] {
                         IP.IPAddr.AsString + " - " + Listed + " - " + IP.BlackList.VerifiedOnServer
-                    }, RFileFolder, true);
+                    }, true);
 
                     // Отправляем делегату информацию о результатов сканирования
                     if(InvokeRequired)
@@ -133,15 +139,14 @@ namespace DNSBL_Checker
 
             // Маркуем конечные строки
             FileRenderClass RFileRender = new FileRenderClass(Address + "_" + RFilename);
-            RFileRender.SaveResult(Address + "_" + RFilename, new string[] {
+            RFileRender.SaveResult(RFileFolder, new string[] {
                 Environment.NewLine,
                 bads + "/" + goods + "/" + Convert.ToString(goods+bads),
                 "DONE!",
-            }, RFileFolder, true);
+            }, true);
 
             if(InvokeRequired)
                 Invoke(InfoReset);
-
         }
 
         // Для обновления информации на главной форме
@@ -191,8 +196,11 @@ namespace DNSBL_Checker
                 }
             }
 
+            if (ResultBox.Items.Count > 0)
+                this.SaveAsToolStripMenuItem.Enabled = true;
+
             // Если пришел аргумент - выполняем и закрываем программу
-            if (ARGS.Length > 0)
+            if (ARGS.Length > 1)
                 Environment.Exit(0);
         }
 
@@ -209,9 +217,6 @@ namespace DNSBL_Checker
                     break;
                 case 2:
                     MessageBox.Show("Обновления отсутствуют!");
-                    break;
-                default:
-
                     break;
             }
 
@@ -230,7 +235,7 @@ namespace DNSBL_Checker
         }
 
         // Действие запуска сканирования
-        private void run()
+        private void runThread()
         {
             if (this.ScanBtnStat == false)
             {
@@ -253,7 +258,6 @@ namespace DNSBL_Checker
                     this.BootThread = new Thread(() => RunScan(Address));
                     BootThread.IsBackground = true;
                     BootThread.Start();
-
                 }
                 else
                 {
@@ -267,25 +271,13 @@ namespace DNSBL_Checker
         --------------------------------*/
         private void ScanBtn_Click(object sender, EventArgs e)
         {
-            this.run();
+            this.runThread();
         }
 
         private void AddressEdit_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Return)
-                this.run();
-        }
-
-        // Контекстное меню
-        private void ClearRBoxToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (ResultBox.Items.Count > 0)
-                this.ResultBox.Items.Clear();
-        }
-
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.CloseWindowNow();
+                this.runThread();
         }
 
         private void CancelBtn_Click(object sender, EventArgs e)
@@ -310,6 +302,37 @@ namespace DNSBL_Checker
 
             this.UList = new Thread(UpdateServerList);
             UList.Start();
+        }
+
+        /* Контекстное меню
+        -----------------------------*/
+        private void ClearRBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ResultBox.Items.Count > 0)
+            {
+                this.SaveAsToolStripMenuItem.Enabled = false;
+                this.ResultBox.Items.Clear();
+            }
+        }
+
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.CloseWindowNow();
+        }
+
+        // Чуть поже переделаю
+        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Данная операция недоступна!");
+            /*
+            saveFileDialog.Filter = "Log file|*.log";
+            saveFileDialog.FileName = RFilename;
+            saveFileDialog.ShowDialog();
+
+            FileRenderClass FileRender = new FileRenderClass(saveFileDialog.FileName);
+            MessageBox.Show(saveFileDialog.FileName);
+            //FileRender.SaveResult(saveFileDialog.FileName, "", );
+            */
         }
     }
 }

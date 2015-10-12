@@ -24,7 +24,6 @@ namespace DNSBL_Checker
 
         // Ресурсы
         private FileInfo ifile;
-        private DirectoryInfo idir;
         private Stream stream;
         private StreamReader sreader;
         private StreamWriter swriter;
@@ -46,32 +45,45 @@ namespace DNSBL_Checker
             }
         }
 
+        /*
         // Чтобы создать каталог
         public bool CreateFolder(string FolderName)
         {
-            if(Directory.Exists(FolderName))
+            try
             {
+                Directory.CreateDirectory(FolderName);
+                return true;
 
+            } catch(System.IO.IOException e)
+            {
+                MessageBox.Show(e.Message);
+                return false;
             }
-            return true;
         }
+        */
 
         // Метод для создания черного списка, если он не существует
         protected void CreateBLS(string Filename)
         {
-            using (StreamWriter stream = this.ifile.CreateText())
+            try
             {
-                // Записываем список серверов в новый файл
-                stream.WriteLine("cbl.abuseat.org");
-                stream.WriteLine("bogons.cymru.com");
-                stream.WriteLine("dyna.spamrats.com");
-                stream.WriteLine("http.dnsbl.sorbs.net");
-                stream.WriteLine("dnsbl-3.uceprotect.net"); 
-                stream.WriteLine("xbl.spamhaus.org"); 
-                stream.WriteLine("zen.spamhaus.org");
-                stream.Close();
+                using (StreamWriter stream = this.ifile.CreateText())
+                {
+                    // Записываем список серверов в новый файл
+                    stream.WriteLine("cbl.abuseat.org");
+                    stream.WriteLine("bogons.cymru.com");
+                    stream.WriteLine("dyna.spamrats.com");
+                    stream.WriteLine("http.dnsbl.sorbs.net");
+                    stream.WriteLine("dnsbl-3.uceprotect.net");
+                    stream.WriteLine("xbl.spamhaus.org");
+                    stream.WriteLine("zen.spamhaus.org");
+                    stream.Close();
 
-                this.ifile.Refresh();
+                    this.ifile.Refresh();
+                }
+            } catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
@@ -97,38 +109,67 @@ namespace DNSBL_Checker
         // Для загрузки черного списка из текстовика
         public string[] LoadBLS()
         {
-            if (this.ifile.Exists) {
-                using (this.stream = ifile.Open(FileMode.Open, FileAccess.Read))
+            try
+            {
+                if (this.ifile.Exists)
                 {
-                    // Чтение файла
-                    this.sreader = new StreamReader(this.stream);
+                    using (this.stream = ifile.Open(FileMode.Open, FileAccess.Read))
+                    {
+                        // Чтение файла
+                        this.sreader = new StreamReader(this.stream);
 
-                    return this.sreader.ReadToEnd().Split(new string[] {
+                        return this.sreader.ReadToEnd().Split(new string[] {
                         Environment.NewLine
                     }, StringSplitOptions.RemoveEmptyEntries);  // Очищаем пустые строки
+                    }
+                } else {
+                    this.CreateBLS(this.filename);  // Если файл не существует то применяя рекурсию создаем его и читаем ^_^
+                    return this.LoadBLS();
                 }
-            } else {
-                this.CreateBLS(this.filename);  // Если файл не существует то применяя рекурсию создаем его и читаем ^_^
-                return this.LoadBLS();
-            }
-        }
-
-        // Записываем результат с формы в текстовик (нужно будет сделать так, чтобы файл перезаписывался)
-        public void SaveResult(string Filename, string[] Data, string FolderName, bool Rewrite = false)
-        {
-            using (this.data = new FileStream(Filename, FileMode.OpenOrCreate))
+            } catch (Exception err)
             {
-                data.Close();
-                using (this.swriter = new StreamWriter(Filename, Rewrite))
-                {
-                    foreach (string Line in Data)
-                        swriter.WriteLine(Line);
-                }
-
-                this.swriter.Close();
-                this.ifile.Refresh();
+                MessageBox.Show(err.Message);
+                return new string[] { };
             }
         }
+
+        // Записываем результат с формы в текстовик
+        public void SaveResult(string FolderName, string[] Data, bool Rewrite = false)
+        {
+            try
+            {
+                if (Directory.Exists(FolderName))
+                {
+                    using (this.data = new FileStream(FolderName + "/" + this.filename, FileMode.OpenOrCreate))
+                    {
+                        data.Close();
+                        using (this.swriter = new StreamWriter(FolderName + "/" + this.filename, Rewrite))
+                        {
+                            foreach (string Line in Data)
+                                swriter.WriteLine(Line);
+                        }
+
+                        this.swriter.Close();
+                        this.ifile.Refresh();
+                    }
+                } else {
+                    // Создаем папку
+                    Directory.CreateDirectory(FolderName);
+                    this.SaveResult(FolderName, Data, Rewrite);
+                }
+            } catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+        }
+
+        /*
+        // Модифицированная копия функции выше, необходима для сохранения файла в отдельный каталог (может быть сделаю все в одну универсальную функцию)
+        public void SaveResultAs(string Filename, string[] Data, string FolderName, bool Rewrite = false)
+        {
+
+        }
+        */
 
         // Функция проверки хеша одного файла с другом
         private bool CheckHash()
@@ -169,11 +210,13 @@ namespace DNSBL_Checker
                 if(CheckHash() == false)
                 {
                     WC.DownloadFile(RemoteBLSAddr, this.filename);
+                    WC.Dispose();
                     return 1;   //  Обновление успешно!
-                } else
+                } else {
+                    WC.Dispose();
                     return 2;   //  Обновления отсутствуют!
-
-            } catch(System.Net.WebException err)
+                }
+            } catch (System.Net.WebException err)
             {
                 MessageBox.Show("[" + err.Status + "] Ошибка во время обновления списка серверов!");
                 return -1;  //  Ошибка во время обновления!

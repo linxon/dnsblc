@@ -40,6 +40,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.ExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ScanBtn = new System.Windows.Forms.Button();
             this.UpdateLink = new System.Windows.Forms.LinkLabel();
             this.StopBtn = new System.Windows.Forms.Button();
             this.labelAllCount = new System.Windows.Forms.Label();
@@ -50,7 +51,7 @@
             this.AddressEdit = new System.Windows.Forms.ComboBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.ScanBtn = new System.Windows.Forms.Button();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.ResBoxContextMenuStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -108,6 +109,7 @@
             this.SaveAsToolStripMenuItem.Name = "SaveAsToolStripMenuItem";
             this.SaveAsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.SaveAsToolStripMenuItem.Text = "Соханить как...";
+            this.SaveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // ClearRBoxToolStripMenuItem
             // 
@@ -143,6 +145,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(120, 421);
             this.panel1.TabIndex = 1;
+            // 
+            // ScanBtn
+            // 
+            this.ScanBtn.Location = new System.Drawing.Point(6, 4);
+            this.ScanBtn.Name = "ScanBtn";
+            this.ScanBtn.Size = new System.Drawing.Size(102, 39);
+            this.ScanBtn.TabIndex = 9;
+            this.ScanBtn.Text = "&Сканировать";
+            this.ScanBtn.UseVisualStyleBackColor = true;
+            this.ScanBtn.Click += new System.EventHandler(this.ScanBtn_Click);
             // 
             // UpdateLink
             // 
@@ -247,16 +259,6 @@
             this.toolStripProgressBar.Size = new System.Drawing.Size(160, 16);
             this.toolStripProgressBar.Visible = false;
             // 
-            // ScanBtn
-            // 
-            this.ScanBtn.Location = new System.Drawing.Point(6, 4);
-            this.ScanBtn.Name = "ScanBtn";
-            this.ScanBtn.Size = new System.Drawing.Size(102, 39);
-            this.ScanBtn.TabIndex = 9;
-            this.ScanBtn.Text = "&Сканировать";
-            this.ScanBtn.UseVisualStyleBackColor = true;
-            this.ScanBtn.Click += new System.EventHandler(this.ScanBtn_Click);
-            // 
             // MForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -305,6 +307,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem ExitToolStripMenuItem;
         private System.Windows.Forms.Button ScanBtn;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
 
