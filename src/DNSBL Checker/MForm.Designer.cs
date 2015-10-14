@@ -71,6 +71,7 @@
             this.ResultBox.ContextMenuStrip = this.ResBoxContextMenuStrip;
             this.ResultBox.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.ResultBox.GridLines = true;
+            this.ResultBox.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.ResultBox.Location = new System.Drawing.Point(4, 31);
             this.ResultBox.MultiSelect = false;
             this.ResultBox.Name = "ResultBox";
@@ -148,6 +149,7 @@
             // 
             // ScanBtn
             // 
+            this.ScanBtn.AutoEllipsis = true;
             this.ScanBtn.Location = new System.Drawing.Point(6, 4);
             this.ScanBtn.Name = "ScanBtn";
             this.ScanBtn.Size = new System.Drawing.Size(102, 39);

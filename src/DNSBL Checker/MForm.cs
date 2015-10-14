@@ -79,8 +79,8 @@ namespace DNSBL_Checker
                 this.ResetForm();   // Устанавливаем умолчания
         }
 
-        /* Необходимые методы
-        -----------------------------------*/
+        #region Необходимые методы для обработки
+
         private void RunScan(string Address)
         {
             FileRenderClass FileRender = new FileRenderClass(BLFilename);
@@ -161,6 +161,9 @@ namespace DNSBL_Checker
             labelAllCount.Text = labelAll;
             labelBackCount.Text = labelBack;
             labelWhiteCount.Text = labelWhite;
+
+            // Автоскролл вниз формы
+            ResultBox.EnsureVisible(ResultBox.Items.Count -1);
         }
 
         // Для установки умолчаний и очистки информации на главной форме
@@ -204,6 +207,7 @@ namespace DNSBL_Checker
                 Environment.Exit(0);
         }
 
+        // Вывод сообщений о статусе обновлений списка серверов
         private void UpdateServerList()
         {
             FileRenderClass FileRender = new FileRenderClass(BLFilename);
@@ -267,8 +271,10 @@ namespace DNSBL_Checker
             }
         }
 
-        /* Обработка событий
-        --------------------------------*/
+        #endregion
+
+        #region Обработка событий
+
         private void ScanBtn_Click(object sender, EventArgs e)
         {
             this.runThread();
@@ -324,6 +330,7 @@ namespace DNSBL_Checker
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Данная операция недоступна!");
+
             /*
             saveFileDialog.Filter = "Log file|*.log";
             saveFileDialog.FileName = RFilename;
@@ -334,5 +341,7 @@ namespace DNSBL_Checker
             //FileRender.SaveResult(saveFileDialog.FileName, "", );
             */
         }
+
+        #endregion
     }
 }

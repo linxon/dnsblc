@@ -6,3 +6,8 @@ C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Ch
 C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\x86\Release\DNSBL Checker.csproj.GenerateResource.Cache
 C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\x86\Release\DNSBL Checker.exe
 C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\x86\Release\DNSBL Checker.pdb
+C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\bin\x86\Release\DNSBL Checker.exe.manifest
+C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\bin\x86\Release\DNSBL Checker.application
+C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\x86\Release\DNSBL Checker.csprojResolveAssemblyReference.cache
+C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\x86\Release\DNSBL Checker.exe.manifest
+C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\x86\Release\DNSBL Checker.application

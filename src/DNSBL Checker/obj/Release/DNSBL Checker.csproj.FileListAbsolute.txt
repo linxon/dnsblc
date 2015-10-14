@@ -16,3 +16,7 @@ C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Ch
 C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\Release\DNSBL Checker.csproj.GenerateResource.Cache
 C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\Release\DNSBL Checker.exe
 C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\Release\DNSBL Checker.pdb
+C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\bin\Release\DNSBL Checker.exe.manifest
+C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\bin\Release\DNSBL Checker.application
+C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\Release\DNSBL Checker.exe.manifest
+C:\Users\linxon\Documents\Visual Studio 2015\Projects\DNSBL Checker\src\DNSBL Checker\obj\Release\DNSBL Checker.application

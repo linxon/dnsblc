@@ -45,24 +45,10 @@ namespace DNSBL_Checker
             }
         }
 
-        /*
-        // Чтобы создать каталог
-        public bool CreateFolder(string FolderName)
-        {
-            try
-            {
-                Directory.CreateDirectory(FolderName);
-                return true;
-
-            } catch(System.IO.IOException e)
-            {
-                MessageBox.Show(e.Message);
-                return false;
-            }
-        }
-        */
-
-        // Метод для создания черного списка, если он не существует
+        /// <summary>
+        /// Создать файл серверов, если он отсутствует
+        /// </summary>
+        /// <param name="Filename">Имя файла</param>
         protected void CreateBLS(string Filename)
         {
             try
@@ -81,7 +67,7 @@ namespace DNSBL_Checker
 
                     this.ifile.Refresh();
                 }
-            } catch (Exception err)
+            } catch (IOException err)
             {
                 MessageBox.Show(err.Message);
             }
@@ -106,7 +92,10 @@ namespace DNSBL_Checker
         }
         */
 
-        // Для загрузки черного списка из текстовика
+        /// <summary>
+        /// Загрузить список серверов для проверки
+        /// </summary>
+        /// <returns>Возвращает данные из файла</returns>
         public string[] LoadBLS()
         {
             try
@@ -126,14 +115,19 @@ namespace DNSBL_Checker
                     this.CreateBLS(this.filename);  // Если файл не существует то применяя рекурсию создаем его и читаем ^_^
                     return this.LoadBLS();
                 }
-            } catch (Exception err)
+            } catch (IOException err)
             {
                 MessageBox.Show(err.Message);
                 return new string[] { };
             }
         }
 
-        // Записываем результат с формы в текстовик
+        /// <summary>
+        /// Сохранить результат в указанном каталоге
+        /// </summary>
+        /// <param name="FolderName">Имя каталога</param>
+        /// <param name="Data">Данные для записи</param>
+        /// <param name="Rewrite">Режим перезаписи файла</param>
         public void SaveResult(string FolderName, string[] Data, bool Rewrite = false)
         {
             try
@@ -157,7 +151,7 @@ namespace DNSBL_Checker
                     Directory.CreateDirectory(FolderName);
                     this.SaveResult(FolderName, Data, Rewrite);
                 }
-            } catch (Exception err)
+            } catch (IOException err)
             {
                 MessageBox.Show(err.Message);
             }
@@ -171,7 +165,10 @@ namespace DNSBL_Checker
         }
         */
 
-        // Функция проверки хеша одного файла с другом
+        /// <summary>
+        /// Для сравнения хеша списка серверов с удаленным списком
+        /// </summary>
+        /// <returns></returns>
         private bool CheckHash()
         {
             using (this.data = this.ifile.Open(FileMode.OpenOrCreate, FileAccess.Read))
@@ -197,7 +194,10 @@ namespace DNSBL_Checker
             }
         }
 
-        // Для обновления списка серверов
+        /// <summary>
+        /// Обновить список серверов
+        /// </summary>
+        /// <returns></returns>
         public int UpdateBLS()
         {
             try
@@ -223,7 +223,9 @@ namespace DNSBL_Checker
             }
         }
 
-        // Кеш
+        /// <summary>
+        /// Создать кеш файл
+        /// </summary>
         protected void CreateCache()
         {
             using (StreamWriter stream = this.ifile.CreateText())
@@ -233,6 +235,11 @@ namespace DNSBL_Checker
             }
         }
 
+        /// <summary>
+        /// Проверить кеш файл
+        /// </summary>
+        /// <param name="Cache">Имя файла</param>
+        /// <returns></returns>
         private bool CheckCache(string Cache)
         {
             using (this.sreader = new StreamReader(this.filename))
@@ -254,6 +261,10 @@ namespace DNSBL_Checker
             }
         }
 
+        /// <summary>
+        /// Обновить кеш файл
+        /// </summary>
+        /// <param name="Cache">Имя файла</param>
         public void UpdateCahce(string Cache)
         {
             if (this.ifile.Exists)
@@ -275,6 +286,10 @@ namespace DNSBL_Checker
             }
         }
 
+        /// <summary>
+        /// Загрузить кеш файл
+        /// </summary>
+        /// <returns>Возвращает данные из файла</returns>
         public string[] LoadCahce()
         {
             if (this.ifile.Exists)
