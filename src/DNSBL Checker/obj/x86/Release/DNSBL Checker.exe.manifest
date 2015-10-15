@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DNSBL Checker.exe" size="43440">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DNSBL Checker.exe" size="43952">
       <assemblyIdentity name="DNSBL Checker" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>T1psTBD5/JkRIcd02oOB6gziMtFX5XPeqqbr/ilkfBE=</dsig:DigestValue>
+        <dsig:DigestValue>lZtq9RHuNuPiZ+62TTjYDsJGed8SK9fgz0oSC0fh5Jc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

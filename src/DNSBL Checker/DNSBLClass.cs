@@ -409,7 +409,7 @@ namespace DNSBL_Checker
             } catch(System.Net.Sockets.SocketException errs)
             {
                 this.isInit = false;
-                MessageBox.Show("[" + errs.ErrorCode+ "] " + errs.Message);
+                MessageBox.Show("[" + errs.ErrorCode+ "] " + errs.Message, "Ошибка");
             }
         }
 
@@ -425,7 +425,7 @@ namespace DNSBL_Checker
                 switch (VerifyOnServer(_blacklistservers))
                 {
                     case -1:
-                        MessageBox.Show("Ошибка во время валидации");
+                        MessageBox.Show("Ошибка во время валидации", "Ошибка");
                         break;
                     case 1:
                         _blacklisted = new BlackListed(true, _blacklistservers);

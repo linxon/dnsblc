@@ -17,7 +17,10 @@ namespace DNSBL_Checker
         public int count = -1;
         public string argument = null;
 
-        // Для подгрузки аргументов
+        /// <summary>
+        /// Выдает список аргументов запуска программы
+        /// </summary>
+        /// <returns>Возвращает список аргументов</returns>
         public string[] GetArgs()
         {
             string[] ARGS = Environment.GetCommandLineArgs();
@@ -32,7 +35,13 @@ namespace DNSBL_Checker
             } else return new string[] { };
         }
 
-        // Для проверки аргумента (string[] Args - список аргументов, int Num - Номер проверяемого на доступность аргумента)
+        /// <summary>
+        /// Проверить доступные аргументы или отфильтровать ихы
+        /// </summary>
+        /// <param name="Args">Список аргументов</param>
+        /// <param name="NumArg">Идентификатор аргумента в списке</param>
+        /// <param name="MaxLength">Максимальное количество символов в аргументе</param>
+        /// <returns>Отфильтрованный аргумент</returns>
         public bool CheckArg(string[] Args, int NumArg = 1, int MaxLength = 1)
         {
             int c = Args.Length;

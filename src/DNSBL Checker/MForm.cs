@@ -24,7 +24,7 @@ namespace DNSBL_Checker
         // Необходимые поля
         string MFormTitle = "DNSBL Checker: (by Linxon http://www.linxon.ru)";
         string[] BLS, ARGS;
-        int bads, goods = 0;
+        int bads, goods, countServers = 0;
 
         bool StopBtnStat, ScanBtnStat, UpdateLinkStat = false;
 
@@ -60,6 +60,7 @@ namespace DNSBL_Checker
             ARGS = AParser.GetArgs();  // Получаем список аргументов
 
             // Проверяем на доступность 1-го агумента с минимальным числом символов 2 (учитывается домен с 3-х значными символами)
+            // но не учитывается IP адресс :(
             if (AParser.CheckArg(ARGS, 1, 2))
             {
                 if(AParser.CheckArg(ARGS, 2, 3))
@@ -85,9 +86,9 @@ namespace DNSBL_Checker
         {
             FileRenderClass FileRender = new FileRenderClass(BLFilename);
             this.BLS = FileRender.LoadBLS();    //  Загружаем список серверов
-            
-            int c = this.BLS.Length;
-            for (int i = 0; i < c; i++)
+
+            countServers = this.BLS.Length;
+            for (int i = 0; i < countServers; i++)
             {
                 VerifyAddressClass IP = new VerifyAddressClass(Address, this.BLS[i].Trim());
 
@@ -123,7 +124,7 @@ namespace DNSBL_Checker
                             InfoUpdater,
 
                             NewIp,
-                            c * 100,
+                            countServers * 100,
                             i * 100,
 
                             "Всего: " + Convert.ToString(this.bads + this.goods),
@@ -161,6 +162,8 @@ namespace DNSBL_Checker
             labelAllCount.Text = labelAll;
             labelBackCount.Text = labelBack;
             labelWhiteCount.Text = labelWhite;
+
+            this.Text = "DNSBL Checker: Проверка...";
 
             // Автоскролл вниз формы
             ResultBox.EnsureVisible(ResultBox.Items.Count -1);
@@ -217,10 +220,10 @@ namespace DNSBL_Checker
                     // Прочие ошибки
                     break;
                 case 1:
-                    MessageBox.Show("Список серверов был успешно обновлен!");
+                    MessageBox.Show("Список серверов был успешно обновлен!", "Внимание");
                     break;
                 case 2:
-                    MessageBox.Show("Обновления отсутствуют!");
+                    MessageBox.Show("Обновления отсутствуют!", "Внимание");
                     break;
             }
 
@@ -238,12 +241,17 @@ namespace DNSBL_Checker
             Application.Exit(); // Чао!
         }
 
+        private bool CheckIPAddr(string Addr)
+        {
+            return true;
+        }
+
         // Действие запуска сканирования
         private void runThread()
         {
             if (this.ScanBtnStat == false)
             {
-                this.Text = "DNSBL Checker: Проверка...";
+                this.Text = "DNSBL Checker: Инициализация...";
                 this.ResultBox.Items.Clear();
                 this.ScanBtnStat = true;
                 this.AddressEdit.Enabled = false;
@@ -262,10 +270,8 @@ namespace DNSBL_Checker
                     this.BootThread = new Thread(() => RunScan(Address));
                     BootThread.IsBackground = true;
                     BootThread.Start();
-                }
-                else
-                {
-                    MessageBox.Show("Введите IP адрес или домен!");
+                } else {
+                    MessageBox.Show("Введите IP адрес или домен!", "Ошибка");
                     ResetForm();
                 }
             }
@@ -329,7 +335,7 @@ namespace DNSBL_Checker
         // Чуть поже переделаю
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Данная операция недоступна!");
+            MessageBox.Show("Данная операция недоступна!", "Ошибка");
 
             /*
             saveFileDialog.Filter = "Log file|*.log";

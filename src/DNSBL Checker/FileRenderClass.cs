@@ -32,16 +32,25 @@ namespace DNSBL_Checker
         // Ссылка к списку серверов
         string RemoteBLSAddr = "http://share.linxon.ru/2015/07/bl-servers.txt";
 
-        // Инициализация
+        /// <summary>
+        /// Инициализация класса
+        /// </summary>
+        /// <param name="Filename">Имя файла для работы</param>
         public FileRenderClass(string Filename)
         {
-            this.filename = Filename;
-
-            this.ifile = new FileInfo(Filename);
-            if (this.stream != null)
+            try
             {
-                this.data.Close();
-                this.stream.Close();
+                this.filename = Filename;
+
+                this.ifile = new FileInfo(Filename);
+                if (this.stream != null)
+                {
+                    this.data.Close();
+                    this.stream.Close();
+                }
+            } catch (IOException err)
+            {
+                MessageBox.Show(err.Message, "Ошибка");
             }
         }
 
@@ -69,7 +78,7 @@ namespace DNSBL_Checker
                 }
             } catch (IOException err)
             {
-                MessageBox.Show(err.Message);
+                MessageBox.Show(err.Message, "Ошибка");
             }
         }
 
@@ -117,7 +126,7 @@ namespace DNSBL_Checker
                 }
             } catch (IOException err)
             {
-                MessageBox.Show(err.Message);
+                MessageBox.Show(err.Message, "Ошибка");
                 return new string[] { };
             }
         }
@@ -134,10 +143,10 @@ namespace DNSBL_Checker
             {
                 if (Directory.Exists(FolderName))
                 {
-                    using (this.data = new FileStream(FolderName + "/" + this.filename, FileMode.OpenOrCreate))
+                    using (this.data = new FileStream(FolderName + "\\" + this.filename, FileMode.OpenOrCreate))
                     {
                         data.Close();
-                        using (this.swriter = new StreamWriter(FolderName + "/" + this.filename, Rewrite))
+                        using (this.swriter = new StreamWriter(FolderName + "\\" + this.filename, Rewrite))
                         {
                             foreach (string Line in Data)
                                 swriter.WriteLine(Line);
@@ -153,7 +162,7 @@ namespace DNSBL_Checker
                 }
             } catch (IOException err)
             {
-                MessageBox.Show(err.Message);
+                MessageBox.Show(err.Message, "Ошибка");
             }
         }
 
@@ -168,7 +177,7 @@ namespace DNSBL_Checker
         /// <summary>
         /// Для сравнения хеша списка серверов с удаленным списком
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Возвращает true если хеш совпадает</returns>
         private bool CheckHash()
         {
             using (this.data = this.ifile.Open(FileMode.OpenOrCreate, FileAccess.Read))
@@ -218,7 +227,7 @@ namespace DNSBL_Checker
                 }
             } catch (System.Net.WebException err)
             {
-                MessageBox.Show("[" + err.Status + "] Ошибка во время обновления списка серверов!");
+                MessageBox.Show("[" + err.Status + "] Ошибка во время обновления списка серверов!", "Внимание");
                 return -1;  //  Ошибка во время обновления!
             }
         }
@@ -267,22 +276,28 @@ namespace DNSBL_Checker
         /// <param name="Cache">Имя файла</param>
         public void UpdateCahce(string Cache)
         {
-            if (this.ifile.Exists)
+            try
             {
-                using (this.data = new FileStream(this.filename, FileMode.OpenOrCreate))
+                if (this.ifile.Exists)
                 {
-                    this.data.Close();
-                    if(this.CheckCache(Cache))
+                    using (this.data = new FileStream(this.filename, FileMode.OpenOrCreate))
                     {
-                        using (this.swriter = new StreamWriter(this.filename, true))
-                            swriter.WriteLine(Cache);
+                        this.data.Close();
+                        if (this.CheckCache(Cache))
+                        {
+                            using (this.swriter = new StreamWriter(this.filename, true))
+                                swriter.WriteLine(Cache);
+                        }
+
+                        this.ifile.Refresh();
                     }
-                    
-                    this.ifile.Refresh();
+                } else {
+                    CreateCache();
+                    UpdateCahce(Cache);
                 }
-            } else {
-                CreateCache();
-                UpdateCahce(Cache);
+            } catch(IOException err)
+            {
+                MessageBox.Show(err.Message,"Ошибка");
             }
         }
 
@@ -292,20 +307,27 @@ namespace DNSBL_Checker
         /// <returns>Возвращает данные из файла</returns>
         public string[] LoadCahce()
         {
-            if (this.ifile.Exists)
+            try
             {
-                using (this.stream = ifile.Open(FileMode.Open, FileAccess.Read))
+                if (this.ifile.Exists)
                 {
-                    // Чтение файла
-                    this.sreader = new StreamReader(this.stream);
+                    using (this.stream = ifile.Open(FileMode.Open, FileAccess.Read))
+                    {
+                        // Чтение файла
+                        this.sreader = new StreamReader(this.stream);
 
-                    return this.sreader.ReadToEnd().Split(new string[] {
+                        return this.sreader.ReadToEnd().Split(new string[] {
                         Environment.NewLine
                     }, StringSplitOptions.RemoveEmptyEntries);  // Очищаем пустые строки
+                    }
+                } else {
+                    this.CreateCache();
+                    return this.LoadCahce();
                 }
-            } else {
-                this.CreateCache();
-                return this.LoadCahce();
+            } catch(IOException err)
+            {
+                MessageBox.Show(err.Message, "Ошибка");
+                return new string[] { };
             }
         }
     }
