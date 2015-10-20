@@ -5,10 +5,6 @@
 /// email@linxon.ru
 ///
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Net;
 using System.IO;
@@ -117,8 +113,8 @@ namespace DNSBL_Checker
                         this.sreader = new StreamReader(this.stream);
 
                         return this.sreader.ReadToEnd().Split(new string[] {
-                        Environment.NewLine
-                    }, StringSplitOptions.RemoveEmptyEntries);  // Очищаем пустые строки
+                            Environment.NewLine
+                        }, StringSplitOptions.RemoveEmptyEntries);  // Очищаем пустые строки
                     }
                 } else {
                     this.CreateBLS(this.filename);  // Если файл не существует то применяя рекурсию создаем его и читаем ^_^
@@ -182,23 +178,30 @@ namespace DNSBL_Checker
         {
             using (this.data = this.ifile.Open(FileMode.OpenOrCreate, FileAccess.Read))
             {
-                MD5 md5hash = new MD5CryptoServiceProvider();
-
-                byte[] RemoteHash = md5hash.ComputeHash(this.stream);
-                byte[] LocalHash = md5hash.ComputeHash(this.data);
-
-                for (int i = 0; i < RemoteHash.Length; i++)
+                try
                 {
-                    if (RemoteHash[i] == LocalHash[i])
-                        continue;   // Если совпадает - продолжаем
-                    else
-                        return false;   // Возварщаем false, если хеш не совпадает
+                    MD5 md5hash = new MD5CryptoServiceProvider();
+
+                    byte[] RemoteHash = md5hash.ComputeHash(this.stream);
+                    byte[] LocalHash = md5hash.ComputeHash(this.data);
+
+                    for (int i = 0; i < RemoteHash.Length; i++)
+                    {
+                        if (RemoteHash[i] == LocalHash[i])
+                            continue;   // Если совпадает - продолжаем
+                        else
+                            return false;   // Возварщаем false, если хеш не совпадает
+                    }
+
+                } catch(CryptographicException)
+                {
+                    return false;
+                } finally
+                {
+                    // Очищаем после проверки
+                    this.stream.Close();
+                    this.data.Close();
                 }
-
-                // Очищаем после проверки
-                this.stream.Close();
-                this.data.Close();
-
                 return true;
             }
         }

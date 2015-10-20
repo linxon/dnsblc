@@ -142,7 +142,7 @@ namespace DNSBL_Checker
             FileRenderClass RFileRender = new FileRenderClass(Address + "_" + RFilename);
             RFileRender.SaveResult(RFileFolder, new string[] {
                 Environment.NewLine,
-                bads + "/" + goods + "/" + Convert.ToString(goods+bads),
+                bads + "/" + goods + "/" + (goods+bads),
                 "DONE!",
             }, true);
 
@@ -263,7 +263,6 @@ namespace DNSBL_Checker
                 if (this.AddressEdit.Text.Length > 2)
                 {
                     string Address = this.AddressEdit.Text.Trim();
-
                     CFileRender.UpdateCahce(Address);
 
                     // Запускаем в отдельном потоке
@@ -335,7 +334,7 @@ namespace DNSBL_Checker
         // Чуть поже переделаю
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Данная операция недоступна!", "Ошибка");
+            MessageBox.Show("Данная операция пока недоступна!", "Ошибка");
 
             /*
             saveFileDialog.Filter = "Log file|*.log";
